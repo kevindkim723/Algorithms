@@ -5,56 +5,49 @@ import java.util.Scanner;
 
 public class PercolationSimulator {
 	static Random r = new Random();
+	static class ij
+	{
+		public int i;
+		public int j;
+		public ij(int i, int j)
+		{
+			this.i = i;
+			this.j = j;
+		}
+	}
 
 	public static void main(String[] args)
 	{
-		LinkedList<Integer> rows = new LinkedList<Integer>();
-		LinkedList<Integer> cols = new LinkedList<Integer>();
-		
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter board length: ");
 		int n = s.nextInt();
-		for (int i = 0; i < n; i++)
-		{
-			rows.add(i);
-			cols.add(i);
-		}
-		
-		boolean[][] board = new boolean[n][n];
-		QuickUnionPathCompression nodes = new QuickUnionPathCompression(n*n+2);
-		
-		while (nodes.connected(0, n*n+1) == false && rows.size()!=0)
-		{
-			int rowfill = generate(rows);
-			int colfill = generate(cols);
-			board[rowfill][colfill] = true;
+		System.out.println("Enter trials: ");
+		int t = s.nextInt();
+		double mean = 0;
+		percolationboard pb = new percolationboard(n, true);
 
-			int nodeIndex = rowfill * (n) + colfill + 1;
-			
-			
-			if (rowfill == 0)
-			{
-				nodes.merge(nodeIndex, 0);
-			}
-			else if (rowfill == n-1)
-			{
-				nodes.merge(nodeIndex, n+1);
-				if ()
-			}
-			
-			else
-			{
-				
-			}
-			System.out.println(rowfill);
-			
+		for (int i=0; i < t; i ++)
+		{
+			pb.fill();
+			mean += pb.getp();
 		}
+		System.out.println(mean/t);
+		
+		
+		
+		
+			
+			
+		
 	}
-	public static int generate(LinkedList<Integer> set)
+	public static ij generate(LinkedList<ij> set)
 	{
-		int x = set.get(r.nextInt(set.size()));
+		ij x = set.get(r.nextInt(set.size()));
 		set.removeFirstOccurrence(x);
 		return x;
 		
 	}
+	
+	
+	
 }
