@@ -1,13 +1,15 @@
 
-public class QuickUnionPathCompression extends QuickUnion {
+public class QuickUnionNoCompression extends QuickUnion {
 	/*
 	 * union data structure, determines if two nodes are connected on a path using
 	 * 1d array.
 	 */
 	private int[] nodes;
 	private int[] heights;
+	private boolean[] coverednodes;
 
-	public QuickUnionPathCompression(int n) {
+	public QuickUnionNoCompression(int n) {
+		coverednodes = new boolean[n];
 		heights = new int[n];
 		nodes = new int[n];
 		for (int i = 0; i < n; i++) {
@@ -30,19 +32,12 @@ public class QuickUnionPathCompression extends QuickUnion {
 	 */
 	public int find(int i) {
 		int height = 0;
-		int root = i;
-		while (root != nodes[root]) {
-			root = nodes[root];
+		while (i != nodes[i]) {
+			i = nodes[i];
 			height++;
 		}
-		while (i != root) {
-			int nextnode = nodes[i];
-			nodes[i] = root;
-			i = nextnode;
-			height--;
-
-		}
-		heights[root] = height;
+		
+		heights[i] = height;
 		return i;
 	}
 
