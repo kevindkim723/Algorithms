@@ -71,6 +71,7 @@ public class bees2 {
 
 	}
 
+	// Dijkstra
 	public static int[] shortestPath(LinkedList<Node> adj[], int nodes, int x, int[] weights) {
 		int[] shortestDistances = new int[nodes];
 		Arrays.fill(shortestDistances, Integer.MAX_VALUE);
