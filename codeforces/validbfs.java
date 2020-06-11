@@ -2,18 +2,15 @@ import java.io.*;
 import java.util.*;
 
 public class validbfs {
-	static LinkedList<Integer>[] adj = new LinkedList[100001];
-	static LinkedList<Integer>[] hnode = new LinkedList[100001];
-	static int[] heights = new int[100001];
-	static int[] roots =  new int[100001];
-	static int[] childrens = new int[100001];
+	static LinkedList<Integer>[] adj = new LinkedList[200001];
+	static int[] roots = new int[200001];
+	static int[] childrens = new int[200001];
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
-		for (int i = 0; i <= 100; i++) {
+		for (int i = 0; i <= 200000; i++) {
 			adj[i] = new LinkedList<>();
-			hnode[i] = new LinkedList<>();
 		}
 
 		for (int i = 0; i < n - 1; i++) {
@@ -28,15 +25,17 @@ public class validbfs {
 		for (int i = 0; i < n; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
+		if (arr[0] != 1) {
+			System.out.println("No");
+			return;
+		}
 		Queue<Integer> queue = new LinkedList<>();
 		queue.add(1);
 		HashSet<Integer> visited = new HashSet<>();
 		visited.add(1);
-		heights[1] = 0;
 		roots[1] = 1;
 		while (!queue.isEmpty()) {
 			int node = queue.poll();
-			hnode[heights[node]].add(node);
 			Iterator<Integer> itr = adj[node].listIterator();
 			int numchild = 0;
 			while (itr.hasNext()) {
@@ -44,55 +43,34 @@ public class validbfs {
 				if (!visited.contains(x)) {
 					queue.add(x);
 					visited.add(x);
-					heights[x] = heights[node] + 1;
 					roots[x] = node;
 					numchild++;
 
 				}
 			}
-			childrens[n] = numchild;
+			childrens[node] = numchild;
 		}
 
-		//pf(hnode);
-
-		int c = 0;
+		int c = 1;
 		Queue<Integer> q = new LinkedList<>();
-		//System.out.println("h: " + heights[n]);
-		for (int i = 0; i <= heights[n]; i++) {
-			//System.out.println("i: " + i);
-			int j = hnode[i].size();
-			System.out.println("j: " + j);
-			int k = 0;
+		q.add(1);
+		while (!q.isEmpty()) {
+			int p = q.poll();
 
-			//System.out.println(j + c);
+			int i;
+			for (i = c; i < childrens[p] + c; i++) {
 
-			int parent = queue.poll();
-			int parentsize = adj[parent].size();
-			for (k = c; k < j + c; k++) { //run through this loop everytime new height is reached
-				if ()
-
-				
-				//System.out.println("K: " + k);
-				q.add(arr[k]);
-				if (!hnode[i].contains(arr[k]) ||  ) {
+				if (roots[arr[i]] != p) {
 					System.out.println("No");
-
 					return;
 				}
+				q.add(arr[i]);
 			}
-			c += j;
 
+			c = i;
 		}
 		System.out.println("Yes");
 
-	}
-
-	static void pf(LinkedList<Integer>[] l) {
-		for (LinkedList<Integer> a : l) {
-
-			if (a != null)
-				System.out.println(a);
-		}
 	}
 
 }
