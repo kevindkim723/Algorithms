@@ -11,6 +11,8 @@ public class thetworoutes {
 	public static void main(String[] args) throws Exception
 
 	{
+		Arrays.fill(roadHeight, -1);
+		Arrays.fill(railHeight, -1);
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
@@ -40,30 +42,53 @@ public class thetworoutes {
 			int b = Integer.parseInt(st.nextToken());
 			railTree[a].add(b);
 			railTree[b].add(a);
+			roadTree[a].remove(Integer.valueOf(b));
+			roadTree[b].remove(Integer.valueOf(a));
 
 		}
-		for (int i = 1; i < 401; i++) { //this is to remove the roads, we dfs on root node n, remove all those nodes from n in roadtree, then repeat for all nodes n that exist in the railtree
-			dfs(i, i, new HashSet<Integer>());
+
+		Queue<Integer> queue = new LinkedList<>();
+		HashSet<Integer> visited = new HashSet<Integer>();
+		queue.add(1);
+		railHeight[1] = 0;
+		visited.add(1);
+		while (!queue.isEmpty()) {
+			int node = queue.poll();
+			Iterator<Integer> itr = railTree[node].listIterator();
+			while (itr.hasNext()) {
+				int subnode = itr.next();
+				if (!visited.contains(subnode)) {
+					visited.add(subnode);
+					queue.add(subnode);
+					railHeight[subnode] = railHeight[node] + 1;
+				}
+			}
+
 		}
-		pf(roadTree);
+		queue.clear();
+		visited.clear();
+		queue.add(1);
+		roadHeight[1] = 0;
+		visited.add(1);
+		while (!queue.isEmpty()) {
+			int node = queue.poll();
+			Iterator<Integer> itr = roadTree[node].listIterator();
+			while (itr.hasNext()) {
+				int subnode = itr.next();
+				if (!visited.contains(subnode)) {
+					visited.add(subnode);
+					queue.add(subnode);
+					roadHeight[subnode] = roadHeight[node] + 1;
+				}
+			}
 
-	}
-
-	public static void dfs(int root, int n, HashSet<Integer> visited) {
-		if (visited.contains(n)) {
+		}
+		if (roadHeight[n] == -1 || railHeight[n] == -1) {
+			System.out.println(-1);
 			return;
 		}
-		visited.add(n);
-		Iterator<Integer> itr = railTree[n].listIterator();
-		while (itr.hasNext()) {
-			int subnode = itr.next();
-			if (!visited.contains(subnode)) {
-				roadTree[subnode].remove(Integer.valueOf(root));
-				roadTree[root].remove(Integer.valueOf(subnode));
-				
-				dfs(root, subnode, visited);
-			}
-		}
+		System.out.println(Math.max(roadHeight[n], railHeight[n]));
+
 	}
 
 	static void pf(LinkedList<Integer>[] l) {
